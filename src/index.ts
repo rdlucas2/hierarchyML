@@ -307,7 +307,7 @@ while(!win) {
         console.log(" ");
         break;
     }
-    
+
     //select card to play (determine card to impersonate, discard, or bounce)
     let moveData: MoveData = evaluateMove(line, validCards, getActivePlayer(players).hand, getInactivePlayer(players).hand);
     console.log(getActivePlayer(players).name, "Choosing Card:", JSON.stringify(moveData.selectedCard.name));
@@ -336,9 +336,18 @@ while(!win) {
             //other player determines card to return and returns it
             if(moveData.cardToBounce) {
                 console.log(getActivePlayer(players).name, "Bouncing:", JSON.stringify(moveData.cardToBounce.name));
+                if(moveData.cardToBounce.wasImposter) {
+                    moveData.cardToBounce = deck.cards.find((c: Card) => { return c.rank === Rank.IMPOSTER; });
+                    moveData.cardToBounce.wasImposter = false;
+                }
                 getInactivePlayer(players).hand.push(removeCard(line, moveData.cardToBounce));
+
                 let opponentCardToBounce = evaluateBounce(line, getInactivePlayer(players).hand, getActivePlayer(players).hand);
                 console.log(getInactivePlayer(players).name, "Bouncing:", JSON.stringify(opponentCardToBounce.name));
+                if(opponentCardToBounce.wasImposter) {
+                    opponentCardToBounce = deck.cards.find((c: Card) => { return c.rank === Rank.IMPOSTER; });
+                    opponentCardToBounce.wasImposter = false;
+                }
                 getActivePlayer(players).hand.push(removeCard(line, opponentCardToBounce));
             }
             break;
