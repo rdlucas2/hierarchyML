@@ -30,6 +30,7 @@ export class Card {
 
     name: string;
     isRoyalty: boolean;
+    wasImposter: boolean;
 
     ability: string;
     rank: Rank;
