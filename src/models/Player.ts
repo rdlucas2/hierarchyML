@@ -5,6 +5,6 @@ export class Player {
         this.name = name;
     }
     name: string;
-    hand: Card[];
+    hand: Card[] = [];
     isActive: boolean = false;
 }
