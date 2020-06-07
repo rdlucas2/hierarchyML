@@ -174,6 +174,7 @@ export class Game {
                         lastCard.rank != Rank.USURPER &&
                         (lastCard.rank === Rank.SERF ||
                             lastCard.rank === Rank.KNIGHT ||
+                            lastCard.rank === Rank.SORCERER ||
                             lastCard.isRoyalty === true)
                     ) {
                         cards.push(c);
