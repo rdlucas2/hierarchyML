@@ -13,7 +13,7 @@ var players: Player[] = [player1, player2];
 
 //create cards
 let deck: Deck = new Deck();
-switch(mode) {
+switch (mode) {
     case "newgame":
         //shuffle cards
         deck.shuffle();
@@ -34,17 +34,17 @@ switch(mode) {
 
         break;
     case "existing":
-        console.log(config);
+        console.log(JSON.stringify(config));
         console.log(" ");
         config.hands[config.handIndex].lightHand.forEach((cardName: string) => {
-            let card = deck.cards.splice(deck.cards.findIndex((c: Card) => { 
+            let card = deck.cards.splice(deck.cards.findIndex((c: Card) => {
                 return c.name === cardName;
             }), 1)[0];
             card.color = Color.LIGHT;
             players[0].hand.push(card);
         });
         config.hands[config.handIndex].darkHand.forEach((cardName: string) => {
-            let card = deck.cards.splice(deck.cards.findIndex((c: Card) => { 
+            let card = deck.cards.splice(deck.cards.findIndex((c: Card) => {
                 return c.name === cardName;
             }), 1)[0];
             card.color = Color.DARK;

@@ -9,10 +9,10 @@ export class Game {
     constructor(players: Player[]) {
         this.players = players;
         //player with imposter goes first
-        this.players[this.players.findIndex((p: Player) => { 
-            return p.hand.findIndex((c: Card) => { 
-                return c.rank === Rank.IMPOSTER 
-            }) >= 0; 
+        this.players[this.players.findIndex((p: Player) => {
+            return p.hand.findIndex((c: Card) => {
+                return c.rank === Rank.IMPOSTER
+            }) >= 0;
         })].isActive = true;
     }
 
@@ -33,26 +33,26 @@ export class Game {
         let lineLengthIncludingTowerIfPresent = line.length + 1;
 
         playerHand.forEach((c: Card) => {
-            switch(c.rank) {
+            switch (c.rank) {
                 case Rank.ASSASSIN:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank != Rank.LEPER && 
+                        lastCard.rank != Rank.LEPER &&
                         lastCard.rank != Rank.TOWER
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.LEPER:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
                         lastCard.rank % 2 != 0
                     ) {
@@ -60,78 +60,79 @@ export class Game {
                     }
                     break;
                 case Rank.SERF:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
                         (lastCard.rank < Rank.SERF ||
-                        lastCard.rank === Rank.USURPER)
+                            lastCard.rank === Rank.USURPER)
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.TOWER:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     }
-                    if(
+                    if (
                         (lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank != Rank.LEPER &&
-                        (lastCard.rank < Rank.TOWER ||
-                        playerHand.length > 1
-                        ))
+                            lastCard.rank != Rank.LEPER &&
+                            (lastCard.rank < Rank.TOWER ||
+                                playerHand.length > 1
+                            ))
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.SURGEON:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
                         lastCard.rank != Rank.SERF &&
                         (lastCard.rank < Rank.SURGEON ||
-                        lastCard.rank === Rank.USURPER)
+                            lastCard.rank === Rank.USURPER)
                     ) {
                         //not valid if only card to bounce is tower
                         cards.push(c);
                     }
                     break;
                 case Rank.KNIGHT:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
                         lastCard.rank != Rank.SERF &&
                         (lastCard.rank < Rank.KNIGHT ||
-                        lastCard.rank === Rank.DRAGON)
+                            lastCard.rank === Rank.DRAGON ||
+                            lastCard.rank === Rank.USURPER)
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.USURPER:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank > Rank.USURPER                 
+                        lastCard.rank > Rank.USURPER
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.SORCERER:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         lastCard.rank < Rank.SORCERER
                     ) {
@@ -139,24 +140,24 @@ export class Game {
                     }
                     break;
                 case Rank.DRAGON:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         (lastCard.rank < Rank.DRAGON ||
-                        lastCard.rank === Rank.BARONESS)
+                            lastCard.rank === Rank.BARONESS)
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.BARONESS:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         cards.push(c);
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         lastCard.rank != Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent <= 7 &&
@@ -166,36 +167,36 @@ export class Game {
                     }
                     break;
                 case Rank.HIGH_PRIEST:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         (lastCard.rank === Rank.SERF ||
-                        lastCard.rank === Rank.KNIGHT ||
-                        lastCard.isRoyalty === true)
+                            lastCard.rank === Rank.KNIGHT ||
+                            lastCard.isRoyalty === true)
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.QUEEN:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         lastCard.rank != Rank.LEPER &&
                         lastCard.rank < Rank.QUEEN &&
-                        line.findIndex((b: Card) => { return b.rank === Rank.BARONESS;}) >= 0
+                        line.findIndex((b: Card) => { return b.rank === Rank.BARONESS; }) >= 0
                     ) {
                         cards.push(c);
                     }
                     break;
                 case Rank.KING:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     }
-                    if(
+                    if (
                         lastCard.rank != Rank.USURPER &&
                         lastCard.rank != Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent >= 7 &&
@@ -205,14 +206,19 @@ export class Game {
                     }
                     break;
                 case Rank.IMPOSTER:
-                    if(!lastCard) {
+                    if (!lastCard) {
                         break;
                     } else if (lastCard.rank === Rank.SORCERER) {
                         break;
                     } else {
-                        let lineHand = line.filter((b: Card) => { return b.rank !== lastCard.rank && b.color !== c.color; });
+                        let lineHand: Card[];
+                        if (config.canImpersonateTower) {
+                            lineHand = line.filter((b: Card) => { return b.rank !== lastCard.rank && b.color !== c.color; });
+                        } else {
+                            lineHand = line.filter((b: Card) => { return b.rank !== lastCard.rank && b.color !== c.color && b.rank !== Rank.TOWER; });
+                        }
                         let validImpersonateCards = this.validate(line, lineHand);
-                        if(validImpersonateCards.length > 0) {
+                        if (validImpersonateCards.length > 0) {
                             cards.push(c);
                         }
                     }
@@ -227,23 +233,23 @@ export class Game {
     evaluateImpersonation(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
         //must choose a valid card to impersonate to beat the last card on the line
-        let opponentColor: Color =  opponentHand.map((c: Card) => { return c.color;})[0];
+        let opponentColor: Color = opponentHand.map((c: Card) => { return c.color; })[0];
         let card: Card = <Card>{};
-        if(config.canImpersonateTower) {
+        if (config.canImpersonateTower) {
             let validCard = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor }))[0];
-            if(!validCard) {
+            if (!validCard) {
                 return null;
             }
             Object.assign(card, validCard);
-            card.color = playerHand.map((c: Card) => { return c.color;})[0];
+            card.color = playerHand.map((c: Card) => { return c.color; })[0];
             card.name = card.name + " ?";
         } else {
-            let validCard = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor && c.rank !== Rank.TOWER}))[0];
-            if(!validCard) {
+            let validCard = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor && c.rank !== Rank.TOWER }))[0];
+            if (!validCard) {
                 return null;
             }
             Object.assign(card, validCard);
-            card.color = playerHand.map((c: Card) => { return c.color;})[0];
+            card.color = playerHand.map((c: Card) => { return c.color; })[0];
             card.name = card.name + " ?";
         }
         //take into consideration cards you and opponent have left
@@ -253,15 +259,15 @@ export class Game {
     evaluateDiscard(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
         let lastCard = line[line.length - 1];
-        if(lastCard.rank != Rank.LEPER && lastCard.rank != Rank.SERF && lastCard.rank < Rank.TOWER ) {
+        if (lastCard.rank != Rank.LEPER && lastCard.rank != Rank.SERF && lastCard.rank < Rank.TOWER) {
             return null;
         }
         //if the tower isn't in the player hand, then it's the imposter causing the discard
         let card: Card;
-        if(playerHand.findIndex((c: Card) =>{ return c.rank === Rank.TOWER;}) < 0) {
-            card = playerHand.filter((c: Card) => { return c.rank !== Rank.IMPOSTER})[0];
+        if (playerHand.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) < 0) {
+            card = playerHand.filter((c: Card) => { return c.rank !== Rank.IMPOSTER })[0];
         } else {
-            card = playerHand.filter((c: Card) => { return c.rank !== Rank.TOWER})[0];
+            card = playerHand.filter((c: Card) => { return c.rank !== Rank.TOWER })[0];
         }
         //take into consideration cards you and opponent have left - and maybe even what's been played already?
         return card;
@@ -269,12 +275,13 @@ export class Game {
 
     evaluateBounce(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
-        if(line.length < 1) {
+        if (line.length < 1) {
             return null;
         }
 
         //cannot bounce tower because it is 2 cards
-        let card = line.filter((c: Card) => { return c.rank !== Rank.TOWER})[0];
+        let opponentColor: Color = opponentHand.map((c: Card) => { return c.color; })[0];
+        let card = line.filter((c: Card) => { return c.rank !== Rank.TOWER && c.color === opponentColor })[0];
         return card;
     }
 
@@ -283,10 +290,10 @@ export class Game {
         let moveData = new MoveData();
         moveData.selectedCard = validMoveCards[0];
 
-        switch(moveData.selectedCard.rank) {
+        switch (moveData.selectedCard.rank) {
             case Rank.IMPOSTER:
                 moveData.cardToImpersonate = this.evaluateImpersonation(line, playerHand, opponentHand);
-                if(!moveData.cardToImpersonate) {
+                if (!moveData.cardToImpersonate) {
                     break;
                 }
                 switch (moveData.cardToImpersonate.rank) {
@@ -316,7 +323,7 @@ export class Game {
     }
 
     towerAction(moveData: MoveData): void {
-        if(moveData.cardToDiscard) {
+        if (moveData.cardToDiscard) {
             console.log(this.getActivePlayer(this.players).name, "Discarding:", JSON.stringify(moveData.cardToDiscard.name));
             this.removeCard(this.getActivePlayer(this.players).hand, moveData.cardToDiscard);
         }
@@ -325,20 +332,20 @@ export class Game {
     surgeonAction(moveData: MoveData, line: Card[]): void {
         //player using surgeon returns opponent card
         //other player determines card to return and returns it
-        if(moveData.cardToBounce) {
+        if (moveData.cardToBounce) {
             console.log(this.getActivePlayer(this.players).name, "Bouncing:", JSON.stringify(moveData.cardToBounce.name));
-            if(moveData.cardToBounce.wasImposter) {
+            if (moveData.cardToBounce.wasImposter) {
                 moveData.cardToBounce = new Card("Play this as a copy of any card already played by your opponent, except the top card.", Rank.IMPOSTER);
-                moveData.cardToBounce.color = this.getActivePlayer(this.players).hand.map((c: Card) => { return c.color})[0];
+                moveData.cardToBounce.color = this.getActivePlayer(this.players).hand.map((c: Card) => { return c.color })[0];
                 moveData.cardToBounce.wasImposter = false;
             }
             this.getInactivePlayer(this.players).hand.push(this.removeCard(line, moveData.cardToBounce));
 
             let opponentCardToBounce = this.evaluateBounce(line, this.getInactivePlayer(this.players).hand, this.getActivePlayer(this.players).hand);
             console.log(this.getInactivePlayer(this.players).name, "Bouncing:", JSON.stringify(opponentCardToBounce.name));
-            if(opponentCardToBounce.wasImposter) {
+            if (opponentCardToBounce.wasImposter) {
                 opponentCardToBounce = new Card("Play this as a copy of any card already played by your opponent, except the top card.", Rank.IMPOSTER);
-                moveData.cardToBounce.color = this.getInactivePlayer(this.players).hand.map((c: Card) => { return c.color})[0];
+                moveData.cardToBounce.color = this.getInactivePlayer(this.players).hand.map((c: Card) => { return c.color })[0];
                 opponentCardToBounce.wasImposter = false;
             }
             this.getActivePlayer(this.players).hand.push(this.removeCard(line, opponentCardToBounce));
@@ -350,7 +357,7 @@ export class Game {
         let win: boolean = false;
         let validCards: Card[] = [];
         let line: Card[] = [];
-        while(!win) {
+        while (!win) {
             console.log(this.getActivePlayer(this.players).name, "Cards In Hand:", this.getActivePlayer(this.players).hand.length, JSON.stringify(this.getActivePlayer(this.players).hand.map((c: Card) => { return c.name; })))
             console.log(this.getInactivePlayer(this.players).name, "Cards In Hand:", this.getInactivePlayer(this.players).hand.length, JSON.stringify(this.getInactivePlayer(this.players).hand.map((c: Card) => { return c.name; })))
             console.log(" ");
@@ -358,8 +365,8 @@ export class Game {
             //determine valid plays (if player has no valid moves, other player wins)
             validCards = this.validate(line, this.getActivePlayer(this.players).hand);
 
-            if(validCards.length > 0) {
-                console.log(this.getActivePlayer(this.players).name, "Valid Cards:", validCards.length, JSON.stringify(validCards.map((c: Card) => {return c.name;})));
+            if (validCards.length > 0) {
+                console.log(this.getActivePlayer(this.players).name, "Valid Cards:", validCards.length, JSON.stringify(validCards.map((c: Card) => { return c.name; })));
                 console.log(" ");
             } else {
                 win = !win;
@@ -371,7 +378,7 @@ export class Game {
             //select card to play (determine card to impersonate, discard, or bounce)
             let moveData: MoveData = this.evaluateMove(line, validCards, this.getActivePlayer(this.players).hand, this.getInactivePlayer(this.players).hand);
             //maybe there's a case where while it looks like there's a valid move, on evaulation no card is returned, which means there was no true valid play
-            if(!moveData.selectedCard) {
+            if (!moveData.selectedCard) {
                 win = !win;
                 console.log(this.getInactivePlayer(this.players).name, "Evaluation", "wins!");
                 console.log(" ");
@@ -381,19 +388,18 @@ export class Game {
                 console.log(" ");
             }
 
+            //place card in line
+            line.push(this.removeCard(this.getActivePlayer(this.players).hand, moveData.selectedCard));
+            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return Color[c.color] + " " + c.name; })));
+            console.log(" ");
+
             //determine if any actions need taken (assign imposter, discard for tower, bounce cards for surgeon)
-            switch(moveData.selectedCard.rank) {
+            switch (moveData.selectedCard.rank) {
                 case Rank.IMPOSTER:
-                    if(!moveData.cardToImpersonate) {
-                        win = !win;
-                        console.log(this.getInactivePlayer(this.players).name, "Evaluation", "wins!");
-                        console.log(" ");
-                        break;
-                    }
                     console.log(this.getActivePlayer(this.players).name, "Impersonating:", JSON.stringify(moveData.cardToImpersonate.name));
                     moveData.cardToImpersonate.wasImposter = true;
                     line[line.length - 1] = moveData.cardToImpersonate;
-                    switch(moveData.cardToImpersonate.rank) {
+                    switch (moveData.cardToImpersonate.rank) {
                         case Rank.TOWER:
                             this.towerAction(moveData);
                             break;
@@ -409,15 +415,6 @@ export class Game {
                     this.surgeonAction(moveData, line);
                     break;
             }
-
-            if(win) {
-                break;
-            }
-
-            //place card in line
-            line.push(this.removeCard(this.getActivePlayer(this.players).hand, moveData.selectedCard));
-            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return Color[c.color] + " " + c.name; })));
-            console.log(" ");
 
             //next this.players turn
             this.players.forEach((p: Player) => {
