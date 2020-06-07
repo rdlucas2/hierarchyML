@@ -1,7 +1,8 @@
 {
-    "mode": "newgame",
-    "handIndex": 3,
-    "lastIndex": 3,
+    "mode": "existing",
+    "canImpersonateTower": false,
+    "handIndex": 4,
+    "lastIndex": 4,
     "hands": [{
             "lightHand": [
                 "IMPOSTER", "SERF", "KNIGHT", "KING", "ASSASSIN", "TOWER", "SURGEON"
@@ -33,6 +34,14 @@
             ],
             "darkHand": [
                 "ASSASSIN", "QUEEN", "USURPER", "SURGEON", "BARONESS", "DRAGON", "KNIGHT"
+            ]
+        },
+        {
+            "lightHand": [
+                "ASSASSIN", "SERF", "SORCERER", "LEPER", "HIGH_PRIEST", "IMPOSTER", "KING"
+            ],
+            "darkHand": [
+                "TOWER", "QUEEN", "USURPER", "SURGEON", "BARONESS", "DRAGON", "KNIGHT"
             ]
         }
     ]

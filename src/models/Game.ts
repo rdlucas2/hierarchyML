@@ -1,6 +1,7 @@
 import { Player } from "./Player";
 import { Card, Rank, Color } from "./card";
 import { MoveData } from "./MoveData";
+import config from "../config.json";
 
 export class Game {
     players: Player[];
@@ -222,11 +223,29 @@ export class Game {
         return cards;
     }
 
+    //TODO: instead of just returning the first card that comes back ([0]) - try "looking into the future" and running validate recursively?
     evaluateImpersonation(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
         //must choose a valid card to impersonate to beat the last card on the line
-        let opponentColor: Color =  opponentHand.map((b: Card) => { return b.color;})[0];
-        let card = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor}))[0];
+        let opponentColor: Color =  opponentHand.map((c: Card) => { return c.color;})[0];
+        let card: Card = <Card>{};
+        if(config.canImpersonateTower) {
+            let validCard = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor }))[0];
+            if(!validCard) {
+                return null;
+            }
+            Object.assign(card, validCard);
+            card.color = playerHand.map((c: Card) => { return c.color;})[0];
+            card.name = card.name + " ?";
+        } else {
+            let validCard = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor && c.rank !== Rank.TOWER}))[0];
+            if(!validCard) {
+                return null;
+            }
+            Object.assign(card, validCard);
+            card.color = playerHand.map((c: Card) => { return c.color;})[0];
+            card.name = card.name + " ?";
+        }
         //take into consideration cards you and opponent have left
         return card;
     }
@@ -267,6 +286,9 @@ export class Game {
         switch(moveData.selectedCard.rank) {
             case Rank.IMPOSTER:
                 moveData.cardToImpersonate = this.evaluateImpersonation(line, playerHand, opponentHand);
+                if(!moveData.cardToImpersonate) {
+                    break;
+                }
                 switch (moveData.cardToImpersonate.rank) {
                     case Rank.TOWER:
                         //this.removeCard(playerHand, moveData.selectedCard);
@@ -359,14 +381,15 @@ export class Game {
                 console.log(" ");
             }
 
-            //place card in line
-            line.push(this.removeCard(this.getActivePlayer(this.players).hand, moveData.selectedCard));
-            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return Color[c.color] + " " + c.name; })));
-            console.log(" ");
-
             //determine if any actions need taken (assign imposter, discard for tower, bounce cards for surgeon)
             switch(moveData.selectedCard.rank) {
                 case Rank.IMPOSTER:
+                    if(!moveData.cardToImpersonate) {
+                        win = !win;
+                        console.log(this.getInactivePlayer(this.players).name, "Evaluation", "wins!");
+                        console.log(" ");
+                        break;
+                    }
                     console.log(this.getActivePlayer(this.players).name, "Impersonating:", JSON.stringify(moveData.cardToImpersonate.name));
                     moveData.cardToImpersonate.wasImposter = true;
                     line[line.length - 1] = moveData.cardToImpersonate;
@@ -386,6 +409,15 @@ export class Game {
                     this.surgeonAction(moveData, line);
                     break;
             }
+
+            if(win) {
+                break;
+            }
+
+            //place card in line
+            line.push(this.removeCard(this.getActivePlayer(this.players).hand, moveData.selectedCard));
+            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return Color[c.color] + " " + c.name; })));
+            console.log(" ");
 
             //next this.players turn
             this.players.forEach((p: Player) => {
