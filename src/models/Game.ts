@@ -16,7 +16,6 @@ export class Game {
         })].isActive = true;
     }
 
-
     getActivePlayer(players: Player[]): Player {
         return players[players.findIndex((p: Player) => { return p.isActive; })];
     }
@@ -158,10 +157,11 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank !== Rank.USURPER &&
+                        (lastCard.rank !== Rank.USURPER &&
                         lastCard.rank !== Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent <= 7 &&
-                        lastCard.rank < Rank.BARONESS
+                        lastCard.rank < Rank.BARONESS) ||
+                        lastCard.rank === Rank.SORCERER
                     ) {
                         cards.push(c);
                     }
@@ -185,10 +185,11 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank !== Rank.USURPER &&
+                        (lastCard.rank !== Rank.USURPER &&
                         lastCard.rank !== Rank.LEPER &&
                         lastCard.rank < Rank.QUEEN &&
-                        line.findIndex((b: Card) => { return b.rank === Rank.BARONESS; }) >= 0
+                        line.findIndex((b: Card) => { return b.rank === Rank.BARONESS; }) >= 0) ||
+                        lastCard.rank === Rank.SORCERER
                     ) {
                         cards.push(c);
                     }
@@ -198,10 +199,11 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank !== Rank.USURPER &&
+                        (lastCard.rank !== Rank.USURPER &&
                         lastCard.rank !== Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent >= 7 &&
-                        lastCard.rank < Rank.KING
+                        lastCard.rank < Rank.KING) ||
+                        lastCard.rank === Rank.SORCERER
                     ) {
                         cards.push(c);
                     }
