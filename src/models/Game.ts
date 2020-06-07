@@ -1,5 +1,5 @@
 import { Player } from "./Player";
-import { Card, Rank } from "./card";
+import { Card, Rank, Color } from "./card";
 import { MoveData } from "./MoveData";
 
 export class Game {
@@ -225,7 +225,8 @@ export class Game {
     evaluateImpersonation(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
         //must choose a valid card to impersonate to beat the last card on the line
-        let card = this.validate(line, line)[0];
+        let opponentColor: Color =  opponentHand.map((b: Card) => { return b.color;})[0];
+        let card = this.validate(line, line.filter((c: Card) => { return c.color === opponentColor}))[0];
         //take into consideration cards you and opponent have left
         return card;
     }
@@ -236,7 +237,13 @@ export class Game {
         if(lastCard.rank != Rank.LEPER && lastCard.rank != Rank.SERF && lastCard.rank < Rank.TOWER ) {
             return null;
         }
-        let card = playerHand.filter((c: Card) => { return c.rank !== Rank.TOWER})[0];
+        //if the tower isn't in the player hand, then it's the imposter causing the discard
+        let card: Card;
+        if(playerHand.findIndex((c: Card) =>{ return c.rank === Rank.TOWER;}) < 0) {
+            card = playerHand.filter((c: Card) => { return c.rank !== Rank.IMPOSTER})[0];
+        } else {
+            card = playerHand.filter((c: Card) => { return c.rank !== Rank.TOWER})[0];
+        }
         //take into consideration cards you and opponent have left - and maybe even what's been played already?
         return card;
     }
@@ -262,9 +269,11 @@ export class Game {
                 moveData.cardToImpersonate = this.evaluateImpersonation(line, playerHand, opponentHand);
                 switch (moveData.cardToImpersonate.rank) {
                     case Rank.TOWER:
+                        //this.removeCard(playerHand, moveData.selectedCard);
                         moveData.cardToDiscard = this.evaluateDiscard(line, playerHand, opponentHand);
                         break;
                     case Rank.SURGEON:
+                        //this.removeCard(playerHand, moveData.selectedCard);
                         moveData.cardToBounce = this.evaluateBounce(line, playerHand, opponentHand);
                         break;
                 }
@@ -352,7 +361,7 @@ export class Game {
 
             //place card in line
             line.push(this.removeCard(this.getActivePlayer(this.players).hand, moveData.selectedCard));
-            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return c.name; })));
+            console.log("Line:", line.findIndex((c: Card) => { return c.rank === Rank.TOWER; }) >= 0 ? line.length + 1 : line.length, JSON.stringify(line.map((c: Card) => { return Color[c.color] + " " + c.name; })));
             console.log(" ");
 
             //determine if any actions need taken (assign imposter, discard for tower, bounce cards for surgeon)

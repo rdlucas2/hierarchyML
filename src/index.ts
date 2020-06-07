@@ -3,7 +3,7 @@ import { Player } from "./models/Player";
 import { Game } from "./models/Game";
 import config from './config.json';
 
-let mode = "newgame"; // newgame | existing //create a new hand or use an existing
+let mode = "existing"; // newgame | existing //create a new hand or use an existing
 
 //create players
 let player1 = new Player("Light");

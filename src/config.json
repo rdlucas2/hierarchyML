@@ -1,5 +1,6 @@
 {
-    "handIndex": 0,
+    "handIndex": 3,
+    "lastIndex": 3,
     "hands": [{
             "lightHand": [
                 "IMPOSTER", "SERF", "KNIGHT", "KING", "ASSASSIN", "TOWER", "SURGEON"
@@ -16,6 +17,22 @@
                 "SURGEON", "KNIGHT", "KING", "LEPER", "SORCERER", "DRAGON", "ASSASSIN"
             ]
 
+        },
+        {
+            "lightHand": [
+                "SERF", "IMPOSTER", "KNIGHT", "QUEEN", "KING", "HIGH_PRIEST", "ASSASSIN"
+            ],
+            "darkHand": [
+                "DRAGON", "SURGEON", "USURPER", "TOWER", "BARONESS", "LEPER", "SORCERER"
+            ]
+        },
+        {
+            "lightHand": [
+                "TOWER", "SERF", "SORCERER", "LEPER", "HIGH_PRIEST", "IMPOSTER", "KING"
+            ],
+            "darkHand": [
+                "ASSASSIN", "QUEEN", "USURPER", "SURGEON", "BARONESS", "DRAGON", "KNIGHT"
+            ]
         }
     ]
 }
