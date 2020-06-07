@@ -40,9 +40,9 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank != Rank.LEPER &&
-                        lastCard.rank != Rank.TOWER
+                        lastCard.rank !== Rank.SORCERER &&
+                        lastCard.rank !== Rank.LEPER &&
+                        lastCard.rank !== Rank.TOWER
                     ) {
                         cards.push(c);
                     }
@@ -53,8 +53,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank % 2 != 0
+                        lastCard.rank !== Rank.SORCERER &&
+                        lastCard.rank % 2 !== 0
                     ) {
                         cards.push(c);
                     }
@@ -77,8 +77,8 @@ export class Game {
                         break;
                     }
                     if (
-                        (lastCard.rank != Rank.SORCERER &&
-                            lastCard.rank != Rank.LEPER &&
+                        (lastCard.rank !== Rank.SORCERER &&
+                            lastCard.rank !== Rank.LEPER &&
                             (lastCard.rank < Rank.TOWER ||
                                 playerHand.length > 1
                             ))
@@ -92,8 +92,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank != Rank.SERF &&
+                        lastCard.rank !== Rank.SORCERER &&
+                        lastCard.rank !== Rank.SERF &&
                         (lastCard.rank < Rank.SURGEON ||
                             lastCard.rank === Rank.USURPER)
                     ) {
@@ -107,8 +107,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.SORCERER &&
-                        lastCard.rank != Rank.SERF &&
+                        lastCard.rank !== Rank.SORCERER &&
+                        lastCard.rank !== Rank.SERF &&
                         (lastCard.rank < Rank.KNIGHT ||
                             lastCard.rank === Rank.DRAGON ||
                             lastCard.rank === Rank.USURPER)
@@ -121,7 +121,7 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.SORCERER &&
+                        lastCard.rank !== Rank.SORCERER &&
                         lastCard.rank > Rank.USURPER
                     ) {
                         cards.push(c);
@@ -133,7 +133,7 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
+                        lastCard.rank !== Rank.USURPER &&
                         lastCard.rank < Rank.SORCERER
                     ) {
                         cards.push(c);
@@ -145,7 +145,7 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
+                        lastCard.rank !== Rank.USURPER &&
                         (lastCard.rank < Rank.DRAGON ||
                             lastCard.rank === Rank.BARONESS)
                     ) {
@@ -158,8 +158,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
-                        lastCard.rank != Rank.LEPER &&
+                        lastCard.rank !== Rank.USURPER &&
+                        lastCard.rank !== Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent <= 7 &&
                         lastCard.rank < Rank.BARONESS
                     ) {
@@ -171,7 +171,7 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
+                        lastCard.rank !== Rank.USURPER &&
                         (lastCard.rank === Rank.SERF ||
                             lastCard.rank === Rank.KNIGHT ||
                             lastCard.rank === Rank.SORCERER ||
@@ -185,8 +185,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
-                        lastCard.rank != Rank.LEPER &&
+                        lastCard.rank !== Rank.USURPER &&
+                        lastCard.rank !== Rank.LEPER &&
                         lastCard.rank < Rank.QUEEN &&
                         line.findIndex((b: Card) => { return b.rank === Rank.BARONESS; }) >= 0
                     ) {
@@ -198,8 +198,8 @@ export class Game {
                         break;
                     }
                     if (
-                        lastCard.rank != Rank.USURPER &&
-                        lastCard.rank != Rank.LEPER &&
+                        lastCard.rank !== Rank.USURPER &&
+                        lastCard.rank !== Rank.LEPER &&
                         lineLengthIncludingTowerIfPresent >= 7 &&
                         lastCard.rank < Rank.KING
                     ) {
@@ -260,7 +260,7 @@ export class Game {
     evaluateDiscard(line: Card[], playerHand: Card[], opponentHand: Card[]): Card {
         // TODO: implement
         let lastCard = line[line.length - 1];
-        if (lastCard.rank != Rank.LEPER && lastCard.rank != Rank.SERF && lastCard.rank < Rank.TOWER) {
+        if ((lastCard.rank !== Rank.LEPER && lastCard.rank !== Rank.SERF && lastCard.rank < Rank.TOWER) || lastCard.rank === Rank.USURPER) {
             return null;
         }
         //if the tower isn't in the player hand, then it's the imposter causing the discard
