@@ -291,7 +291,13 @@ export class Game {
     evaluateMove(line: Card[], validMoveCards: Card[], playerHand: Card[], opponentHand: Card[]): MoveData {
         // TODO: implement
         let moveData = new MoveData();
+
         moveData.selectedCard = validMoveCards[0];
+
+        //TODO: run through all possibilities
+        // validMoveCards.forEach((c: Card) => {
+
+        // });
 
         switch (moveData.selectedCard.rank) {
             case Rank.IMPOSTER:
@@ -343,8 +349,10 @@ export class Game {
                 moveData.cardToBounce.wasImposter = false;
             }
             this.getInactivePlayer(this.players).hand.push(this.removeCard(line, moveData.cardToBounce));
+        }
 
-            let opponentCardToBounce = this.evaluateBounce(line, this.getInactivePlayer(this.players).hand, this.getActivePlayer(this.players).hand);
+        let opponentCardToBounce = this.evaluateBounce(line, this.getInactivePlayer(this.players).hand, this.getActivePlayer(this.players).hand);
+        if (opponentCardToBounce) {
             console.log(this.getInactivePlayer(this.players).name, "Bouncing:", JSON.stringify(opponentCardToBounce.name));
             if (opponentCardToBounce.wasImposter) {
                 opponentCardToBounce = new Card("Play this as a copy of any card already played by your opponent, except the top card.", Rank.IMPOSTER);
@@ -352,13 +360,13 @@ export class Game {
                 opponentCardToBounce.wasImposter = false;
             }
             this.getActivePlayer(this.players).hand.push(this.removeCard(line, opponentCardToBounce));
-        }
+       }
     }
 
     run(): void {
         //while no winner...
         let win: boolean = false;
-        let validCards: Card[] = [];
+        // let validCards: Card[] = [];
         let line: Card[] = [];
         while (!win) {
             console.log(this.getActivePlayer(this.players).name, "Cards In Hand:", this.getActivePlayer(this.players).hand.length, JSON.stringify(this.getActivePlayer(this.players).hand.map((c: Card) => { return c.name; })))
@@ -366,7 +374,7 @@ export class Game {
             console.log(" ");
 
             //determine valid plays (if player has no valid moves, other player wins)
-            validCards = this.validate(line, this.getActivePlayer(this.players).hand);
+            let validCards = this.validate(line, this.getActivePlayer(this.players).hand);
 
             if (validCards.length > 0) {
                 console.log(this.getActivePlayer(this.players).name, "Valid Cards:", validCards.length, JSON.stringify(validCards.map((c: Card) => { return c.name; })));
@@ -424,7 +432,6 @@ export class Game {
                 p.isActive = !p.isActive;
             });
 
-            validCards = [];
             console.log(" ");
             console.log("======================================");
         }
